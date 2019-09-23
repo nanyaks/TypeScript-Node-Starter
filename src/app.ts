@@ -10,6 +10,8 @@ import mongoose from "mongoose";
 import passport from "passport";
 import bluebird from "bluebird";
 import { MONGODB_URI, SESSION_SECRET } from "./util/secrets";
+import connectRedis from "connect-redis";
+import redis from "redis";
 
 const MongoStore = mongo(session);
 
@@ -37,6 +39,12 @@ mongoose.connect(mongoUrl, { useNewUrlParser: true, useCreateIndex: true } ).the
     // process.exit();
 });
 
+
+// Connect to Redis server
+const RedisStore = connectRedis(session);
+const client = redis.createClient();
+
+
 // Express configuration
 app.set("port", process.env.PORT || 3000);
 app.set("views", path.join(__dirname, "../views"));
@@ -44,6 +52,16 @@ app.set("view engine", "pug");
 app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// Add redis here
+app.use(session({
+    secret:"secret",
+    // store: new RedisStore({host: "127.0.0.1", port: 6379}),
+    store: new RedisStore({client}),
+    resave: false,
+    saveUninitialized: false
+}));
+
 app.use(session({
     resave: true,
     saveUninitialized: true,
