@@ -1,0 +1,40 @@
+version: "3"
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: typescript-node
+    ports:
+      - 3000:3000
+    networks: 
+      - dark_army
+    depends_on:
+      - redis
+      - mongo
+
+  redis:
+    image: redis
+    restart: always
+    ports:
+      - 6379:6379
+    networks: 
+      - dark_army
+    volumes:
+      - /data/db/redis
+
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    networks: 
+      - dark_army
+    volumes:
+      - /data/db/mongo
+
+networks:
+  dark_army:
+    driver: bridge
+
