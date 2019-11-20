@@ -9,7 +9,7 @@ import path from "path";
 import mongoose from "mongoose";
 import passport from "passport";
 import bluebird from "bluebird";
-import { MONGODB_URI, SESSION_SECRET } from "./util/secrets";
+import { MONGODB_URI, SESSION_SECRET, REDIS_HOST } from "./util/secrets";
 import connectRedis from "connect-redis";
 import redis from "redis";
 
@@ -30,6 +30,8 @@ const app = express();
 
 // Connect to MongoDB
 const mongoUrl = MONGODB_URI;
+const redisUrl = REDIS_HOST;
+
 mongoose.Promise = bluebird;
 
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useCreateIndex: true } ).then(
@@ -42,7 +44,7 @@ mongoose.connect(mongoUrl, { useNewUrlParser: true, useCreateIndex: true } ).the
 
 // Connect to Redis server
 const RedisStore = connectRedis(session);
-const client = redis.createClient();
+const client = redis.createClient(redisUrl);
 
 
 // Express configuration
