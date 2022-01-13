@@ -1,6 +1,7 @@
 import errorHandler from "errorhandler";
 
 import app from "./app";
+import "./tracer";
 
 /**
  * Error Handler. Provides full stack - remove for production

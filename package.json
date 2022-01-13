@@ -34,6 +34,7 @@
     "compression": "^1.7.4",
     "connect-mongo": "^3.0.0",
     "connect-redis": "^4.0.2",
+    "dd-trace": "^1.6.0",
     "dotenv": "^8.0.0",
     "errorhandler": "^1.5.1",
     "express": "^4.17.1",
